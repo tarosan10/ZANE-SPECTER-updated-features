@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Invoices | Zane &amp; Specter{% endblock %}
+
+{% block content %}
+<h1 class="h2 mb-3">Invoices</h1>
+
+<h2 class="h4 mb-1">Ready to bill</h2>
+<p class="text-secondary mb-3">
+  Matters with time that has not been invoiced yet. Amounts use each person’s current hourly rate;
+  the rate is locked in when the invoice is generated, and the invoice falls due {{ terms }} days later.
+</p>
+<div class="table-responsive mb-5">
+  <table class="table table-hover align-middle lex-table">
+    <thead>
+      <tr>
+        <th scope="col">Client</th>
+        <th scope="col">Matter</th>
+        <th scope="col">Status</th>
+        <th scope="col" class="text-end">Entries</th>
+        <th scope="col" class="text-end">Hours</th>
+        <th scope="col" class="text-end">Amount</th>
+        <th scope="col" class="text-end"><span class="visually-hidden">Action</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in ready %}
+      <tr>
+        <td>{{ r.company_name }}</td>
+        <td>{{ r.matter_title }}</td>
+        <td>{{ r.status }}</td>
+        <td class="text-end lex-num">{{ r.entries }}</td>
+        <td class="text-end lex-num">{{ r.hours|hours }}</td>
+        <td class="text-end lex-num">{{ r.amount|money }}</td>
+        <td class="text-end">
+          <form method="post" action="{{ url_for('invoice_generate') }}" data-validate data-busy="Generating…">
+            <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+            <input type="hidden" name="matter_id" value="{{ r.matter_id }}">
+            <button type="submit" class="btn btn-sm btn-gold">Generate invoice</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7" class="text-secondary py-4">All time has been invoiced.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<h2 class="h4 mb-3">Recent invoices</h2>
+<div class="table-responsive">
+  <table class="table table-hover align-middle lex-table">
+    <thead>
+      <tr>
+        <th scope="col">Invoice</th>
+        <th scope="col">Client</th>
+        <th scope="col">Matter</th>
+        <th scope="col">Issued</th>
+        <th scope="col">Due</th>
+        <th scope="col">Status</th>
+        <th scope="col" class="text-end">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in recent %}
+      <tr>
+        <td><a href="{{ url_for('invoice_detail', invoice_id=i.invoice_id) }}">#{{ i.invoice_id }}</a></td>
+        <td>{{ i.company_name }}</td>
+        <td>{{ i.matter_title }}</td>
+        <td class="text-nowrap">{{ i.issue_date }}</td>
+        <td class="text-nowrap">{{ i.due_date }}</td>
+        <td>{{ i.status }}</td>
+        <td class="text-end lex-num">{{ i.amount|money }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7" class="text-secondary py-4">No records found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

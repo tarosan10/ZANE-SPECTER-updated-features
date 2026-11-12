@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Edit {{ target.name }} | Zane &amp; Specter{% endblock %}
+
+{% block content %}
+<h1 class="h2 mb-1">Edit staff member</h1>
+<p class="text-secondary mb-4">{{ target.name }}</p>
+
+<div class="card">
+  <div class="card-body">
+    <form method="post" action="{{ url_for('staff_edit', staff_id=target.staff_id) }}" data-validate data-busy="Saving…" novalidate>
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="name" class="form-label">Name</label>
+          <input type="text" class="form-control {{ 'is-invalid' if errors.name }}" id="name" name="name"
+                 value="{{ form.name }}" maxlength="100" required>
+          <div class="invalid-feedback">{{ errors.name or 'Enter the person’s name.' }}</div>
+        </div>
+        <div class="col-md-6">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control {{ 'is-invalid' if errors.email }}" id="email" name="email"
+                 value="{{ form.email }}" maxlength="120" autocomplete="off" required>
+          <div class="invalid-feedback">{{ errors.email or 'Enter a valid email address.' }}</div>
+        </div>
+        <div class="col-md-6">
+          <label for="password" class="form-label">New password <span class="text-secondary">(optional)</span></label>
+          <input type="password" class="form-control {{ 'is-invalid' if errors.password }}" id="password"
+                 name="password" minlength="8" maxlength="128" autocomplete="new-password">
+          <div class="form-text">Leave blank to keep the current password.</div>
+          <div class="invalid-feedback">{{ errors.password or 'Use at least 8 characters.' }}</div>
+        </div>
+        <div class="col-md-6">
+          <label for="role" class="form-label">Role</label>
+          <select class="form-select {{ 'is-invalid' if errors.role }}" id="role" name="role" {{ 'disabled' if is_self }} required>
+            {% for r in roles %}
+            <option value="{{ r }}" {{ 'selected' if form.role == r }}>{{ r }}</option>
+            {% endfor %}
+          </select>
+          {% if is_self %}<div class="form-text">You cannot change your own role.</div>{% endif %}
+          <div class="invalid-feedback">{{ errors.role or 'Choose a role.' }}</div>
+        </div>
+        <div class="col-md-6">
+          <label for="practice_area" class="form-label">Practice area</label>
+          <input type="text" class="form-control {{ 'is-invalid' if errors.practice_area }}" id="practice_area"
+                 name="practice_area" value="{{ form.practice_area }}" list="practiceAreaOptions" maxlength="60" required>
+          <datalist id="practiceAreaOptions">
+            {% for pa in practice_areas %}<option value="{{ pa.practice_area }}">{% endfor %}
+          </datalist>
+          <div class="invalid-feedback">{{ errors.practice_area or 'Enter a practice area.' }}</div>
+        </div>
+        <div class="col-md-6">
+          <label for="hourly_rate" class="form-label">Hourly rate (USD)</label>
+          <input type="number" class="form-control {{ 'is-invalid' if errors.hourly_rate }}" id="hourly_rate"
+                 name="hourly_rate" value="{{ form.hourly_rate }}" min="0" max="999999.99" step="0.01" required>
+          <div class="form-text">Applies to time not yet invoiced. Issued invoices keep the rate they were billed at.</div>
+          <div class="invalid-feedback">{{ errors.hourly_rate or 'Enter a rate of 0 or more.' }}</div>
+        </div>
+        <div class="col-md-6">
+          <label for="manager_id" class="form-label">Manager <span class="text-secondary">(optional)</span></label>
+          <select class="form-select {{ 'is-invalid' if errors.manager_id }}" id="manager_id" name="manager_id">
+            <option value="">No manager</option>
+            {% for m in managers %}
+            <option value="{{ m.staff_id }}" {{ 'selected' if form.manager_id|string == m.staff_id|string }}>{{ m.name }} ({{ m.role }})</option>
+            {% endfor %}
+          </select>
+          <div class="invalid-feedback">{{ errors.manager_id or 'Choose a manager from the list.' }}</div>
+        </div>
+        <div class="col-md-6">
+          <label for="hire_date" class="form-label">Hire date</label>
+          <input type="date" class="form-control {{ 'is-invalid' if errors.hire_date }}" id="hire_date"
+                 name="hire_date" value="{{ form.hire_date }}" required>
+          <div class="invalid-feedback">{{ errors.hire_date or 'Enter a valid hire date.' }}</div>
+        </div>
+      </div>
+      <div class="mt-4 d-flex flex-wrap gap-2">
+        <button type="submit" class="btn btn-gold">Save changes</button>
+        <a class="btn btn-outline-gold" href="{{ url_for('staff') }}">Cancel</a>
+        {% if not is_self %}
+        <a class="btn btn-outline-danger ms-auto" href="{{ url_for('staff_delete', staff_id=target.staff_id) }}">Delete…</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

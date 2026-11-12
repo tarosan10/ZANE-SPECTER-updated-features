@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Clients | Zane &amp; Specter{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+  <h1 class="h2 mb-1">Clients</h1>
+  <p class="text-secondary mb-0">{{ rows|length }} {{ 'client' if rows|length == 1 else 'clients' }}</p>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-hover align-middle lex-table">
+    <thead>
+      <tr>
+        <th scope="col">Company</th>
+        <th scope="col">Industry</th>
+        <th scope="col">Contact</th>
+        <th scope="col" class="text-end">Matters</th>
+        <th scope="col">Client since</th>
+        {% if can_manage %}<th scope="col" class="text-end">Actions</th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in rows %}
+      <tr>
+        <td>{{ c.company_name }}</td>
+        <td>{{ c.industry }}</td>
+        <td>{{ c.contact_email or '—' }}</td>
+        <td class="text-end lex-num">{{ c.matter_count }}</td>
+        <td class="text-nowrap">{{ c.created_at }}</td>
+        {% if can_manage %}
+        <td class="text-end text-nowrap">
+          <a class="btn btn-sm btn-outline-gold" href="{{ url_for('client_edit', client_id=c.client_id) }}">Edit</a>
+          <a class="btn btn-sm btn-outline-danger" href="{{ url_for('client_delete', client_id=c.client_id) }}">Delete</a>
+        </td>
+        {% endif %}
+      </tr>
+      {% else %}
+      <tr><td colspan="{{ 6 if can_manage else 5 }}" class="text-secondary py-4">No records found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if can_manage %}
+<div class="mt-4">
+  <button class="btn btn-outline-gold" type="button" data-bs-toggle="collapse" data-bs-target="#addClient"
+          aria-expanded="{{ 'true' if errors else 'false' }}" aria-controls="addClient">Add client</button>
+
+  <div class="collapse {{ 'show' if errors }}" id="addClient">
+    <div class="card mt-3">
+      <div class="card-body">
+        <h2 class="h4 mb-3">New client</h2>
+        <form method="post" action="{{ url_for('client_add') }}" data-validate data-busy="Adding…" novalidate>
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+          <div class="row g-3">
+        <div class="col-md-6">
+          <label for="new_company_name" class="form-label">Company name</label>
+          <input type="text" class="form-control {{ 'is-invalid' if errors.company_name }}" id="new_company_name" name="company_name"
+                 value="{{ form.company_name }}" maxlength="150" required>
+          <div class="invalid-feedback">{{ errors.company_name or 'Enter the company name.' }}</div>
+        </div>
+        <div class="col-md-6">
+          <label for="new_industry" class="form-label">Industry</label>
+          <input type="text" class="form-control {{ 'is-invalid' if errors.industry }}" id="new_industry" name="industry"
+                 value="{{ form.industry }}" list="new_industryOptions" maxlength="80" required>
+          <datalist id="new_industryOptions">
+            {% for i in industries %}<option value="{{ i.industry }}">{% endfor %}
+          </datalist>
+          <div class="invalid-feedback">{{ errors.industry or 'Enter an industry.' }}</div>
+        </div>
+        <div class="col-md-6">
+          <label for="new_contact_email" class="form-label">Contact email <span class="text-secondary">(optional)</span></label>
+          <input type="email" class="form-control {{ 'is-invalid' if errors.contact_email }}" id="new_contact_email" name="contact_email"
+                 value="{{ form.contact_email }}" maxlength="120" autocomplete="off">
+          <div class="invalid-feedback">{{ errors.contact_email or 'Enter a valid email address.' }}</div>
+        </div>
+          </div>
+          <button type="submit" class="btn btn-gold mt-4">Add client</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

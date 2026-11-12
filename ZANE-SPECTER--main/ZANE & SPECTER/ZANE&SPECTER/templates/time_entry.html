@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Log hours | Zane &amp; Specter{% endblock %}
+
+{% block content %}
+<h1 class="h2 mb-3">Log hours</h1>
+
+<div class="card mb-5">
+  <div class="card-body">
+    <form method="post" action="{{ url_for('log_time') }}" data-validate data-busy="Saving…" novalidate>
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <div class="row g-3">
+        <div class="col-lg-6">
+          <label for="matter_id" class="form-label">Matter</label>
+          <select class="form-select {{ 'is-invalid' if errors.matter_id }}" id="matter_id" name="matter_id" required>
+            <option value="">Choose an active matter</option>
+            {% for m in open_matters %}
+            <option value="{{ m.matter_id }}" {{ 'selected' if form.matter_id|string == m.matter_id|string }}>{{ m.company_name }}: {{ m.matter_title }}</option>
+            {% endfor %}
+          </select>
+          <div class="invalid-feedback">{{ errors.matter_id or 'Choose a matter.' }}</div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <label for="hours" class="form-label">Hours</label>
+          <input type="number" class="form-control {{ 'is-invalid' if errors.hours }}" id="hours" name="hours"
+                 value="{{ form.hours }}" min="0.25" max="24" step="0.25" inputmode="decimal" required>
+          <div class="invalid-feedback">{{ errors.hours or 'Enter between 0.25 and 24 hours.' }}</div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <label for="entry_date" class="form-label">Date</label>
+          <input type="date" class="form-control {{ 'is-invalid' if errors.entry_date }}" id="entry_date"
+                 name="entry_date" value="{{ form.entry_date }}" max="{{ today }}" required>
+          <div class="invalid-feedback">{{ errors.entry_date or 'Enter a date that is not in the future.' }}</div>
+        </div>
+        <div class="col-12">
+          <label for="description" class="form-label">What did you work on?</label>
+          <textarea class="form-control {{ 'is-invalid' if errors.description }}" id="description" name="description"
+                    rows="3" maxlength="500" required>{{ form.description }}</textarea>
+          <div class="invalid-feedback">{{ errors.description or 'Describe the work in 500 characters or fewer.' }}</div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-gold mt-4">Log hours</button>
+    </form>
+  </div>
+</div>
+
+<h2 class="h4 mb-3">Your last 10 entries</h2>
+<div class="table-responsive mb-5">
+  <table class="table table-hover align-middle lex-table">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Matter</th>
+        <th scope="col" class="text-end">Hours</th>
+        <th scope="col">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in recent %}
+      <tr>
+        <td class="text-nowrap">{{ t.entry_date }}</td>
+        <td>{{ t.matter_title }}</td>
+        <td class="text-end lex-num">{{ t.hours_logged|hours }}</td>
+        <td>{{ t.description }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" class="text-secondary py-4">No records found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<h2 class="h4 mb-3">Hours and billable amount by matter</h2>
+<div class="table-responsive">
+  <table class="table table-hover align-middle lex-table">
+    <thead>
+      <tr>
+        <th scope="col">Matter</th>
+        <th scope="col" class="text-end">Total hours</th>
+        <th scope="col" class="text-end">Billable amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in summary %}
+      <tr>
+        <td>{{ s.matter_title }}</td>
+        <td class="text-end lex-num">{{ s.total_hours|hours }}</td>
+        <td class="text-end lex-num">{{ s.billable_amount|money }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="3" class="text-secondary py-4">No records found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

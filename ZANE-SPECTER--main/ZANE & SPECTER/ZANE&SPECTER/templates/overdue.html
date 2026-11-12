@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Overdue invoices | Zane &amp; Specter{% endblock %}
+
+{% block content %}
+<h1 class="h2 mb-3">Overdue invoices</h1>
+
+<div class="lex-overdue-banner mb-4" role="status">
+  <div>
+    <span class="lex-overdue-total">{{ grand_total|money }}</span>
+    <span class="lex-overdue-caption">overdue across {{ rows|length }} {{ 'client' if rows|length == 1 else 'clients' }}</span>
+  </div>
+  <p class="mb-0 text-secondary">Only clients whose unpaid, past-due invoices add up to more than {{ threshold|money }} are listed.</p>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-hover align-middle lex-table">
+    <thead>
+      <tr>
+        <th scope="col">Client</th>
+        <th scope="col" class="text-end">Overdue invoices</th>
+        <th scope="col" class="text-end">Total overdue</th>
+        <th scope="col">Oldest due date</th>
+        <th scope="col" class="text-end">Days overdue</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td>{{ r.company_name }}</td>
+        <td class="text-end lex-num">{{ r.overdue_invoices }}</td>
+        <td class="text-end lex-num lex-danger">{{ r.total_overdue|money }}</td>
+        <td class="text-nowrap">{{ r.oldest_due_date }}</td>
+        <td class="text-end lex-num">{{ r.days_overdue }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="text-secondary py-4">No records found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

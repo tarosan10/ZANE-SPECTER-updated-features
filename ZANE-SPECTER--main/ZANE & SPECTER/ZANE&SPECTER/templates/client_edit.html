@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Edit {{ client.company_name }} | Zane &amp; Specter{% endblock %}
+
+{% block content %}
+<h1 class="h2 mb-1">Edit client</h1>
+<p class="text-secondary mb-4">{{ client.company_name }}</p>
+
+<div class="card">
+  <div class="card-body">
+    <form method="post" action="{{ url_for('client_edit', client_id=client.client_id) }}" data-validate data-busy="Saving…" novalidate>
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="company_name" class="form-label">Company name</label>
+          <input type="text" class="form-control {{ 'is-invalid' if errors.company_name }}" id="company_name" name="company_name"
+                 value="{{ form.company_name }}" maxlength="150" required>
+          <div class="invalid-feedback">{{ errors.company_name or 'Enter the company name.' }}</div>
+        </div>
+        <div class="col-md-6">
+          <label for="industry" class="form-label">Industry</label>
+          <input type="text" class="form-control {{ 'is-invalid' if errors.industry }}" id="industry" name="industry"
+                 value="{{ form.industry }}" list="industryOptions" maxlength="80" required>
+          <datalist id="industryOptions">
+            {% for i in industries %}<option value="{{ i.industry }}">{% endfor %}
+          </datalist>
+          <div class="invalid-feedback">{{ errors.industry or 'Enter an industry.' }}</div>
+        </div>
+        <div class="col-md-6">
+          <label for="contact_email" class="form-label">Contact email <span class="text-secondary">(optional)</span></label>
+          <input type="email" class="form-control {{ 'is-invalid' if errors.contact_email }}" id="contact_email" name="contact_email"
+                 value="{{ form.contact_email }}" maxlength="120" autocomplete="off">
+          <div class="invalid-feedback">{{ errors.contact_email or 'Enter a valid email address.' }}</div>
+        </div>
+      </div>
+      <div class="mt-4 d-flex flex-wrap gap-2">
+        <button type="submit" class="btn btn-gold">Save changes</button>
+        <a class="btn btn-outline-gold" href="{{ url_for('clients') }}">Cancel</a>
+        <a class="btn btn-outline-danger ms-auto" href="{{ url_for('client_delete', client_id=client.client_id) }}">Delete…</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

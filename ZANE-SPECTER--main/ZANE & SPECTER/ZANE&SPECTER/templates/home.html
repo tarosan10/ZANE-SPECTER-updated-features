@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Home | Zane &amp; Specter{% endblock %}
+
+{% block content %}
+<h1 class="h2 mb-1">Welcome, {{ session.name }}</h1>
+<p class="text-secondary mb-4">Signed in as {{ session.role }}.</p>
+
+<div class="row g-3">
+  <div class="col-sm-6 col-lg-3">
+    <a class="lex-stat" href="{{ url_for('matters') }}">
+      <span class="lex-stat-value">{{ stats.active_matters }}</span>
+      <span class="lex-stat-label">Active matters</span>
+    </a>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <a class="lex-stat" href="{{ url_for('log_time') }}">
+      <span class="lex-stat-value">{{ stats.my_hours|hours }}</span>
+      <span class="lex-stat-label">Your hours, last 30 days</span>
+    </a>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <a class="lex-stat" href="{{ url_for('staff') }}">
+      <span class="lex-stat-value">{{ stats.staff_count }}</span>
+      <span class="lex-stat-label">People in the directory</span>
+    </a>
+  </div>
+  {% if session.role in partner_roles %}
+  <div class="col-sm-6 col-lg-3">
+    <a class="lex-stat lex-stat-alert" href="{{ url_for('overdue') }}">
+      <span class="lex-stat-value">{{ stats.overdue_invoices }}</span>
+      <span class="lex-stat-label">Overdue invoices</span>
+    </a>
+  </div>
+  {% endif %}
+</div>
+
+<p class="mt-4 mb-0">
+  <a href="{{ url_for('log_time') }}" class="btn btn-gold me-2">Log hours</a>
+  <a href="{{ url_for('conflict') }}" class="btn btn-outline-gold">Check a new client for conflicts</a>
+</p>
+{% endblock %}

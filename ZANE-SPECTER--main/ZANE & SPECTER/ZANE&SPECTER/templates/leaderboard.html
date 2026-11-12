@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Leaderboard | Zane &amp; Specter{% endblock %}
+
+{% block content %}
+<h1 class="h2 mb-1">Rainmaker leaderboard</h1>
+<p class="text-secondary mb-4">Top five partners by paid invoices on the matters they lead. Unpaid and void invoices do not count.</p>
+
+<div class="table-responsive">
+  <table class="table table-hover align-middle lex-table">
+    <thead>
+      <tr>
+        <th scope="col" class="lex-rank">Rank</th>
+        <th scope="col">Partner</th>
+        <th scope="col">Practice area</th>
+        <th scope="col" class="text-end">Paid revenue</th>
+        <th scope="col" class="lex-share-col">Share of top earner</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td class="lex-rank">{{ loop.index }}</td>
+        <td>{{ r.name }}</td>
+        <td>{{ r.practice_area }}</td>
+        <td class="text-end lex-num">{{ r.revenue|money }}</td>
+        <td>
+          <div class="progress" role="progressbar" aria-label="{{ r.name }}'s share of the top earner"
+               aria-valuenow="{{ r.share|round|int }}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar" style="width: {{ '%.1f'|format(r.share) }}%"></div>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="text-secondary py-4">No records found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

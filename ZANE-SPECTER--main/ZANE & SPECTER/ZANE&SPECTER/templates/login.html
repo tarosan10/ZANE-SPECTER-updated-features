@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Sign in | Zane &amp; Specter{% endblock %}
+{% block main_class %}lex-auth{% endblock %}
+{% block flashes %}{% endblock %}
+
+{% block content %}
+<section class="lex-auth-brand">
+  <h1 class="lex-wordmark">Zane &amp; Specter</h1>
+  <p class="lex-tagline">Matters, time and billing, together in one place for the firm.</p>
+</section>
+
+<section class="lex-auth-panel">
+  <div class="lex-auth-form">
+    <h2 class="h3 mb-4">Sign in</h2>
+    {% include "_flashes.html" %}
+    <form method="post" action="{{ url_for('login', next=next_url) if next_url else url_for('login') }}">
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{ email }}"
+               autocomplete="username" required autofocus>
+      </div>
+      <div class="mb-4">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password"
+               autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-gold w-100">Sign in</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

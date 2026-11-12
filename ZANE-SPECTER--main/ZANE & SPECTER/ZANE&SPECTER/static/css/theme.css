@@ -1,0 +1,270 @@
+/* ZANE & SPECTER theme: navy and gold, layered over Bootstrap 5.3 dark mode */
+
+:root {
+  --lex-navy: #0b1020;
+  --lex-surface: #141b2e;
+  --lex-gold: #c9a227;
+  --lex-gold-hover: #dbb83d;
+  --lex-gold-active: #b38f1f;
+  --lex-text: #e8eaf0;
+  --lex-muted: #9aa3b8;
+  --lex-border: #26304a;
+  --lex-danger: #e5736b;
+
+  --lex-font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --lex-font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+[data-bs-theme="dark"] {
+  --bs-body-bg: var(--lex-navy);
+  --bs-body-color: var(--lex-text);
+  --bs-secondary-color: var(--lex-muted);
+  --bs-border-color: var(--lex-border);
+  --bs-link-color: var(--lex-gold);
+  --bs-link-hover-color: var(--lex-gold-hover);
+  --bs-link-color-rgb: 201, 162, 39;
+  --bs-link-hover-color-rgb: 219, 184, 61;
+  --bs-heading-color: var(--lex-text);
+  --bs-font-sans-serif: var(--lex-font-body);
+}
+
+body {
+  background: var(--lex-navy);
+  color: var(--lex-text);
+  font-family: var(--lex-font-body);
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--lex-font-display);
+  font-weight: 600;
+  letter-spacing: 0.005em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--lex-gold);
+  outline-offset: 2px;
+}
+
+/* ---------- Navigation ---------- */
+.lex-nav {
+  background: var(--lex-surface);
+  border-bottom: 1px solid var(--lex-gold);
+}
+.lex-brand {
+  font-family: var(--lex-font-display);
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--lex-gold);
+}
+.lex-brand:hover,
+.lex-brand:focus { color: var(--lex-gold-hover); }
+
+.lex-nav .nav-link { color: var(--lex-muted); }
+.lex-nav .nav-link:hover { color: var(--lex-text); }
+.lex-nav .nav-link.active {
+  color: var(--lex-gold);
+  box-shadow: inset 0 -2px 0 var(--lex-gold);
+}
+
+.lex-user { display: flex; flex-direction: column; line-height: 1.2; text-align: right; }
+.lex-user-name { font-weight: 600; }
+.lex-user-role { font-size: 0.8rem; color: var(--lex-muted); }
+
+/* ---------- Buttons ---------- */
+.btn-gold {
+  --bs-btn-color: var(--lex-navy);
+  --bs-btn-bg: var(--lex-gold);
+  --bs-btn-border-color: var(--lex-gold);
+  --bs-btn-hover-color: var(--lex-navy);
+  --bs-btn-hover-bg: var(--lex-gold-hover);
+  --bs-btn-hover-border-color: var(--lex-gold-hover);
+  --bs-btn-active-color: var(--lex-navy);
+  --bs-btn-active-bg: var(--lex-gold-active);
+  --bs-btn-active-border-color: var(--lex-gold-active);
+  --bs-btn-focus-shadow-rgb: 201, 162, 39;
+  font-weight: 600;
+}
+.btn-outline-gold {
+  --bs-btn-color: var(--lex-gold);
+  --bs-btn-border-color: var(--lex-gold);
+  --bs-btn-hover-color: var(--lex-navy);
+  --bs-btn-hover-bg: var(--lex-gold);
+  --bs-btn-hover-border-color: var(--lex-gold);
+  --bs-btn-active-color: var(--lex-navy);
+  --bs-btn-active-bg: var(--lex-gold-active);
+  --bs-btn-active-border-color: var(--lex-gold-active);
+  --bs-btn-focus-shadow-rgb: 201, 162, 39;
+}
+
+/* ---------- Forms ---------- */
+.form-label { color: var(--lex-muted); }
+.form-control {
+  background-color: var(--lex-navy);
+  border-color: var(--lex-border);
+  color: var(--lex-text);
+}
+.form-control:focus {
+  background-color: var(--lex-navy);
+  color: var(--lex-text);
+  border-color: var(--lex-gold);
+  box-shadow: 0 0 0 0.2rem rgba(201, 162, 39, 0.25);
+}
+.form-control:-webkit-autofill {
+  -webkit-text-fill-color: var(--lex-text);
+  box-shadow: 0 0 0 1000px var(--lex-navy) inset;
+}
+
+/* ---------- Surfaces ---------- */
+.card {
+  --bs-card-bg: var(--lex-surface);
+  --bs-card-border-color: var(--lex-border);
+  --bs-card-cap-bg: var(--lex-surface);
+}
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-border-color: var(--lex-border);
+  --bs-table-hover-bg: var(--lex-surface);
+}
+
+.alert {
+  background: var(--lex-surface);
+  color: var(--lex-text);
+  border: 1px solid var(--lex-border);
+  border-left: 3px solid var(--lex-gold);
+}
+.alert-danger { border-left-color: var(--lex-danger); }
+
+/* ---------- Sign-in page ---------- */
+.lex-auth {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.lex-auth-brand {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem 2rem 2rem;
+}
+.lex-wordmark {
+  font-size: clamp(2.75rem, 8vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--lex-gold);
+  margin: 0 0 1.5rem;
+}
+.lex-wordmark::after {
+  content: "";
+  display: block;
+  width: 4.5rem;
+  height: 2px;
+  margin-top: 1.5rem;
+  background: var(--lex-gold);
+}
+.lex-tagline {
+  max-width: 24rem;
+  margin: 0;
+  font-family: var(--lex-font-display);
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: var(--lex-muted);
+}
+.lex-auth-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: var(--lex-surface);
+}
+.lex-auth-form { width: 100%; max-width: 22rem; }
+
+@media (min-width: 992px) {
+  .lex-auth { grid-template-columns: 1.1fr 1fr; }
+  .lex-auth-brand { padding: 4rem; }
+  .lex-auth-panel { border-left: 1px solid var(--lex-gold); }
+}
+
+/* ---------- Additions: tables, selects, alerts ---------- */
+:root {
+  --lex-success: #5fb985;
+  --lex-warning: #e0b341;
+}
+
+.form-select {
+  background-color: var(--lex-navy);
+  border-color: var(--lex-border);
+  color: var(--lex-text);
+}
+.form-select:focus {
+  background-color: var(--lex-navy);
+  color: var(--lex-text);
+  border-color: var(--lex-gold);
+  box-shadow: 0 0 0 0.2rem rgba(201, 162, 39, 0.25);
+}
+.card-body { color: var(--lex-text); }
+
+.lex-table thead th {
+  color: var(--lex-muted);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--lex-gold);
+}
+.lex-num { font-variant-numeric: tabular-nums; }
+.lex-danger { color: var(--lex-danger); }
+.lex-rank { width: 4.5rem; }
+.lex-share-col { min-width: 10rem; }
+
+.progress {
+  --bs-progress-bg: var(--lex-border);
+  --bs-progress-bar-bg: var(--lex-gold);
+  height: 0.5rem;
+}
+
+.alert-danger  { background: rgba(229, 115, 107, 0.12); border-left-color: var(--lex-danger); }
+.alert-warning { background: rgba(224, 179, 65, 0.12);  border-left-color: var(--lex-warning); }
+.alert-success { background: rgba(95, 185, 133, 0.12);  border-left-color: var(--lex-success); }
+
+/* ---------- Home: summary figures ---------- */
+.lex-stat {
+  display: block;
+  height: 100%;
+  padding: 1.25rem 1.5rem;
+  background: var(--lex-surface);
+  border: 1px solid var(--lex-border);
+  border-left: 3px solid var(--lex-gold);
+  border-radius: 0.375rem;
+  color: var(--lex-text);
+  text-decoration: none;
+}
+.lex-stat:hover,
+.lex-stat:focus-visible { border-color: var(--lex-gold); color: var(--lex-text); }
+.lex-stat-value {
+  display: block;
+  font-family: var(--lex-font-display);
+  font-size: 2.25rem;
+  font-weight: 600;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.lex-stat-label { display: block; margin-top: 0.25rem; color: var(--lex-muted); }
+.lex-stat-alert { border-left-color: var(--lex-danger); }
+.lex-stat-alert .lex-stat-value { color: var(--lex-danger); }
+
+/* ---------- Overdue: red-themed banner ---------- */
+.lex-overdue-banner {
+  padding: 1.25rem 1.5rem;
+  background: rgba(229, 115, 107, 0.1);
+  border: 1px solid rgba(229, 115, 107, 0.45);
+  border-left: 4px solid var(--lex-danger);
+  border-radius: 0.375rem;
+}
+.lex-overdue-total {
+  font-family: var(--lex-font-display);
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--lex-danger);
+  font-variant-numeric: tabular-nums;
+}
+.lex-overdue-caption { margin-left: 0.5rem; font-size: 1.1rem; }

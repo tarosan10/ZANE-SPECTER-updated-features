@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Invoice #{{ invoice.invoice_id }} | Zane &amp; Specter{% endblock %}
+
+{% block content %}
+<p class="mb-2"><a href="{{ url_for('invoices') }}">&larr; All invoices</a></p>
+<h1 class="h2 mb-1">Invoice #{{ invoice.invoice_id }}</h1>
+<p class="text-secondary mb-4">{{ invoice.company_name }}: {{ invoice.matter_title }}</p>
+
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-lg-3"><div class="lex-stat"><span class="lex-stat-value">{{ invoice.amount|money }}</span><span class="lex-stat-label">Amount</span></div></div>
+  <div class="col-sm-6 col-lg-3"><div class="lex-stat"><span class="lex-stat-value">{{ invoice.status }}</span><span class="lex-stat-label">Status</span></div></div>
+  <div class="col-sm-6 col-lg-3"><div class="lex-stat"><span class="lex-stat-value">{{ invoice.issue_date }}</span><span class="lex-stat-label">Issued</span></div></div>
+  <div class="col-sm-6 col-lg-3"><div class="lex-stat"><span class="lex-stat-value">{{ invoice.due_date }}</span><span class="lex-stat-label">Due</span></div></div>
+</div>
+
+<h2 class="h4 mb-3">Time billed</h2>
+{% if lines %}
+<div class="table-responsive">
+  <table class="table table-hover align-middle lex-table">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Staff</th>
+        <th scope="col">Description</th>
+        <th scope="col" class="text-end">Hours</th>
+        <th scope="col" class="text-end">Rate</th>
+        <th scope="col" class="text-end">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for l in lines %}
+      <tr>
+        <td class="text-nowrap">{{ l.entry_date }}</td>
+        <td>{{ l.staff_name }}</td>
+        <td>{{ l.description }}</td>
+        <td class="text-end lex-num">{{ l.hours_logged|hours }}</td>
+        <td class="text-end lex-num">{{ l.billed_rate|money }}</td>
+        <td class="text-end lex-num">{{ l.line_amount|money }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th scope="row" colspan="5" class="text-end">Total</th>
+        <td class="text-end lex-num">{{ invoice.amount|money }}</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+{% else %}
+<p class="text-secondary">This invoice was entered directly and is not linked to time entries.</p>
+{% endif %}
+{% endblock %}
